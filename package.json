@@ -11,17 +11,30 @@
     "url": "https://github.com/tauri-apps/tauri.git"
   },
   "scripts": {
-    "format": "prettier --write . --config .prettierrc --ignore-path .prettierignore",
-    "format:check": "prettier --check . --config .prettierrc --ignore-path .prettierignore",
-    "postinstall": "husky install"
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "eslint:check": "pnpm run -r eslint:check",
+    "ts:check": "pnpm run -r ts:check",
+    "build": "pnpm run -r build",
+    "build:api": "pnpm run --filter \"@tauri-apps/api\" build",
+    "build:cli": "pnpm run --filter \"@tauri-apps/cli\" build",
+    "build:cli:debug": "pnpm run --filter \"@tauri-apps/cli\" build:debug",
+    "test": "pnpm run -r test",
+    "example:api:dev": "pnpm run --filter \"api\" tauri dev"
   },
   "devDependencies": {
-    "covector": "^0.9.0",
-    "husky": "^6.0.0",
-    "prettier": "^3.3.2"
+    "prettier": "^3.5.2"
   },
-  "dependencies": {
-    "typescript": "^5.4.5"
-  },
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+  "packageManager": "pnpm@10.5.2",
+  "pnpm": {
+    "overrides": {
+      "cross-spawn@>=7.0.0 <7.0.5": ">=7.0.5",
+      "cookie@<0.7.0": ">=0.7.0",
+      "esbuild@<0.25.0": ">=0.25.0"
+    },
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "workerd"
+    ]
+  }
 }
