@@ -89,9 +89,10 @@ pub fn define_permissions<F: Fn(&Path) -> bool>(
     .collect::<Vec<PathBuf>>();
 
   let pkg_name_valid_path = pkg_name.replace(':', "-");
-  let permission_files_path = out_dir.join(format!("{}-permission-files", pkg_name_valid_path));
+  let permission_files_path = out_dir.join(format!("{pkg_name_valid_path}-permission-files"));
   let permission_files_json = serde_json::to_string(&permission_files)?;
-  fs::write(&permission_files_path, permission_files_json)
+
+  write_if_changed(&permission_files_path, permission_files_json)
     .map_err(|e| Error::WriteFile(e, permission_files_path.clone()))?;
 
   if let Some(plugin_name) = pkg_name.strip_prefix("tauri:") {
@@ -151,7 +152,8 @@ pub fn define_global_scope_schema(
   out_dir: &Path,
 ) -> Result<(), Error> {
   let path = out_dir.join("global-scope.json");
-  fs::write(&path, serde_json::to_vec(&schema)?).map_err(|e| Error::WriteFile(e, path.clone()))?;
+  write_if_changed(&path, serde_json::to_vec(&schema)?)
+    .map_err(|e| Error::WriteFile(e, path.clone()))?;
 
   if let Some(plugin_name) = pkg_name.strip_prefix("tauri:") {
     println!(
@@ -326,10 +328,8 @@ pub fn generate_docs(
   out_dir: &Path,
   plugin_identifier: &str,
 ) -> Result<(), Error> {
+  let mut default_permission = "".to_owned();
   let mut permission_table = "".to_string();
-
-  let mut default_permission = "## Default Permission\n\n".to_string();
-  let mut contains_default = false;
 
   fn docs_from(id: &str, description: Option<&str>, plugin_identifier: &str) -> String {
     let mut docs = format!("\n<tr>\n<td>\n\n`{plugin_identifier}:{id}`\n\n</td>\n");
@@ -351,15 +351,16 @@ pub fn generate_docs(
     }
 
     if let Some(default) = &permission.default {
-      contains_default = true;
-
-      default_permission.push_str(default.description.as_deref().unwrap_or_default());
+      default_permission.push_str("## Default Permission\n\n");
+      default_permission.push_str(default.description.as_deref().unwrap_or_default().trim());
       default_permission.push('\n');
       default_permission.push('\n');
-      default_permission.push_str("#### This default permission set includes the following:\n");
-      default_permission.push('\n');
-      for permission in &default.permissions {
-        default_permission.push_str(&format!("- `{permission}`\n"));
+      if !default.permissions.is_empty() {
+        default_permission.push_str("#### This default permission set includes the following:\n\n");
+        for permission in &default.permissions {
+          default_permission.push_str(&format!("- `{permission}`\n"));
+        }
+        default_permission.push('\n');
       }
     }
 
@@ -373,12 +374,7 @@ pub fn generate_docs(
     }
   }
 
-  if !contains_default {
-    default_permission = "".to_string();
-  }
-
-  let docs =
-    format!("{default_permission}\n{PERMISSION_TABLE_HEADER}\n{permission_table}</table>\n");
+  let docs = format!("{default_permission}{PERMISSION_TABLE_HEADER}\n{permission_table}</table>\n");
 
   let reference_path = out_dir.join(PERMISSION_DOCS_FILE_NAME);
   write_if_changed(&reference_path, docs).map_err(|e| Error::WriteFile(e, reference_path))?;
@@ -467,8 +463,8 @@ pub fn generate_allowed_commands(
   let capabilities = crate::acl::get_capabilities(&config, capabilities_from_files, None)?;
 
   let permission_entries = capabilities
-    .into_iter()
-    .flat_map(|(_, capabilities)| capabilities.permissions);
+    .into_values()
+    .flat_map(|capabilities| capabilities.permissions);
   let mut allowed_commands = AllowedCommands {
     has_app_acl: has_app_manifest(&acl),
     ..Default::default()

@@ -6,7 +6,7 @@ use serde::Deserialize;
 use std::path::PathBuf;
 use tauri::{
   plugin::{Builder, TauriPlugin},
-  Manager, Runtime,
+  Manager, Runtime, State,
 };
 
 pub use models::*;
@@ -28,12 +28,12 @@ pub use error::*;
 
 /// Extensions to [`tauri::App`], [`tauri::AppHandle`] and [`tauri::Window`] to access the sample APIs.
 pub trait SampleExt<R: Runtime> {
-  fn sample(&self) -> &Sample<R>;
+  fn sample(&self) -> State<'_, Sample<R>>;
 }
 
 impl<R: Runtime, T: Manager<R>> crate::SampleExt<R> for T {
-  fn sample(&self) -> &Sample<R> {
-    self.state::<Sample<R>>().inner()
+  fn sample(&self) -> State<'_, Sample<R>> {
+    self.state::<Sample<R>>()
   }
 }
 
@@ -56,8 +56,8 @@ fn ping<R: tauri::Runtime>(
   scope: tauri::ipc::CommandScope<PingScope>,
   global_scope: tauri::ipc::GlobalScope<SampleScope>,
 ) -> std::result::Result<PingResponse, String> {
-  println!("local scope {:?}", scope);
-  println!("global scope {:?}", global_scope);
+  println!("local scope {scope:?}");
+  println!("global scope {global_scope:?}");
   app
     .sample()
     .ping(PingRequest {

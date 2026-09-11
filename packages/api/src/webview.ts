@@ -32,6 +32,7 @@ import {
 import { invoke } from './core'
 import {
   BackgroundThrottlingPolicy,
+  ScrollBarStyle,
   Color,
   Window,
   getCurrentWindow
@@ -592,7 +593,7 @@ class Webview {
   /**
    * Specify the webview background color.
    *
-   * #### Platfrom-specific:
+   * #### Platform-specific:
    *
    * - **macOS / iOS**: Not implemented.
    * - **Windows**:
@@ -713,13 +714,13 @@ interface WebviewOptions {
    * - local file path or route such as `/path/to/page.html` or `/users` is appended to the application URL (the devServer URL on development, or `tauri://localhost/` and `https://tauri.localhost/` on production).
    */
   url?: string
-  /** The initial vertical position. */
+  /** The initial vertical position in logical pixels. */
   x: number
-  /** The initial horizontal position. */
+  /** The initial horizontal position in logical pixels. */
   y: number
-  /** The initial width. */
+  /** The initial width in logical pixels. */
   width: number
-  /** The initial height. */
+  /** The initial height in logical pixels. */
   height: number
   /**
    * Whether the webview is transparent or not.
@@ -854,6 +855,67 @@ interface WebviewOptions {
    * It usually displays a view with "Done", "Next" buttons.
    */
   disableInputAccessoryView?: boolean
+  /**
+   * Set a custom path for the webview's data directory (localStorage, cache, etc.) **relative to [`appDataDir()`]/${label}**.
+   * For security reasons, paths outside of that location can only be configured on the Rust side.
+   *
+   * #### Platform-specific:
+   *
+   * - **Windows**: WebViews with different values for settings like `additionalBrowserArgs`, `browserExtensionsEnabled` or `scrollBarStyle` must have different data directories.
+   * - **macOS / iOS**: Unsupported, use `dataStoreIdentifier` instead.
+   * - **Android**: Unsupported.
+   *
+   * @since 2.9.0
+   */
+  dataDirectory?: string
+  /**
+   * Initialize the WebView with a custom data store identifier. This can be seen as a replacement for `dataDirectory` which is unavailable in WKWebView.
+   * See https://developer.apple.com/documentation/webkit/wkwebsitedatastore/init(foridentifier:)?language=objc
+   *
+   * The array must contain 16 u8 numbers.
+   *
+   * #### Platform-specific:
+   *
+   * - **macOS / iOS**: Available on macOS >= 14 and iOS >= 17
+   * - **Windows / Linux / Android**: Unsupported.
+   *
+   * @since 2.9.0
+   */
+  dataStoreIdentifier?: number[]
+  /**
+   * Specifies the native scrollbar style to use with the webview.
+   * CSS styles that modify the scrollbar are applied on top of the native appearance configured here.
+   *
+   * Defaults to `default`, which is the browser default.
+   *
+   * ## Platform-specific
+   *
+   * - **Windows**:
+   *   - `fluentOverlay` requires WebView2 Runtime version 125.0.2535.41 or higher, and does nothing
+   *     on older versions.
+   *   - This option must be given the same value for all webviews.
+   * - **Linux / Android / iOS / macOS**: Unsupported. Only supports `Default` and performs no operation.
+   */
+  scrollBarStyle?: ScrollBarStyle
+  /**
+   * Controls the WebView's browser-level general autofill behavior.
+   *
+   * **This option does not disable password or credit card autofill.**
+   *
+   * When set to `false`, the WebView will not automatically populate general form
+   * fields using previously stored data such as addresses or contact information.
+   *
+   * If not specified, this is `true` by default.
+   *
+   * ## Platform-specific
+   *
+   * - **Windows**: Supported. WebView2's autofill feature (called "Suggestions")
+   *   may not honor `autocomplete="off"` on input elements in some cases.
+   * - **Linux / Android / iOS / macOS**: Unsupported and performs no operation.
+   *
+   * @since 2.11.0
+   */
+  generalAutofillEnabled?: boolean
 }
 
 export { Webview, getCurrentWebview, getAllWebviews }

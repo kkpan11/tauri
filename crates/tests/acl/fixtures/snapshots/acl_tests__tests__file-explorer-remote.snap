@@ -3,6 +3,7 @@ source: crates/tests/acl/src/lib.rs
 expression: resolved
 ---
 Resolved {
+    has_app_acl: false,
     allowed_commands: {
         "plugin:fs|read_dir": [
             ResolvedCommand {
@@ -13,7 +14,7 @@ Resolved {
                                 pattern_string: "https",
                                 regexp: Ok(
                                     Regex(
-                                        "(?u)^https$",
+                                        "^https$",
                                     ),
                                 ),
                                 group_name_list: [],
@@ -31,7 +32,7 @@ Resolved {
                                 pattern_string: "*",
                                 regexp: Ok(
                                     Regex(
-                                        "(?u)^(.*)$",
+                                        "^(.*)$",
                                     ),
                                 ),
                                 group_name_list: [
@@ -52,7 +53,7 @@ Resolved {
                                 pattern_string: "*",
                                 regexp: Ok(
                                     Regex(
-                                        "(?u)^(.*)$",
+                                        "^(.*)$",
                                     ),
                                 ),
                                 group_name_list: [
@@ -73,7 +74,7 @@ Resolved {
                                 pattern_string: "tauri.app",
                                 regexp: Ok(
                                     Regex(
-                                        "(?u)^tauri\\.app$",
+                                        "^tauri\\.app$",
                                     ),
                                 ),
                                 group_name_list: [],
@@ -91,7 +92,7 @@ Resolved {
                                 pattern_string: "",
                                 regexp: Ok(
                                     Regex(
-                                        "(?u)^$",
+                                        "^$",
                                     ),
                                 ),
                                 group_name_list: [],
@@ -109,7 +110,7 @@ Resolved {
                                 pattern_string: "*",
                                 regexp: Ok(
                                     Regex(
-                                        "(?u)^(.*)$",
+                                        "^(.*)$",
                                     ),
                                 ),
                                 group_name_list: [
@@ -130,7 +131,7 @@ Resolved {
                                 pattern_string: "*",
                                 regexp: Ok(
                                     Regex(
-                                        "(?u)^(.*)$",
+                                        "^(.*)$",
                                     ),
                                 ),
                                 group_name_list: [
@@ -151,7 +152,7 @@ Resolved {
                                 pattern_string: "*",
                                 regexp: Ok(
                                     Regex(
-                                        "(?u)^(.*)$",
+                                        "^(.*)$",
                                     ),
                                 ),
                                 group_name_list: [
@@ -190,6 +191,7 @@ Resolved {
                             ),
                         ],
                         is_recursive: false,
+                        has_metachars: false,
                     },
                 ],
                 webviews: [],
@@ -205,7 +207,7 @@ Resolved {
                                 pattern_string: "https",
                                 regexp: Ok(
                                     Regex(
-                                        "(?u)^https$",
+                                        "^https$",
                                     ),
                                 ),
                                 group_name_list: [],
@@ -223,7 +225,7 @@ Resolved {
                                 pattern_string: "*",
                                 regexp: Ok(
                                     Regex(
-                                        "(?u)^(.*)$",
+                                        "^(.*)$",
                                     ),
                                 ),
                                 group_name_list: [
@@ -244,7 +246,7 @@ Resolved {
                                 pattern_string: "*",
                                 regexp: Ok(
                                     Regex(
-                                        "(?u)^(.*)$",
+                                        "^(.*)$",
                                     ),
                                 ),
                                 group_name_list: [
@@ -265,7 +267,7 @@ Resolved {
                                 pattern_string: "tauri.app",
                                 regexp: Ok(
                                     Regex(
-                                        "(?u)^tauri\\.app$",
+                                        "^tauri\\.app$",
                                     ),
                                 ),
                                 group_name_list: [],
@@ -283,7 +285,7 @@ Resolved {
                                 pattern_string: "",
                                 regexp: Ok(
                                     Regex(
-                                        "(?u)^$",
+                                        "^$",
                                     ),
                                 ),
                                 group_name_list: [],
@@ -301,7 +303,7 @@ Resolved {
                                 pattern_string: "*",
                                 regexp: Ok(
                                     Regex(
-                                        "(?u)^(.*)$",
+                                        "^(.*)$",
                                     ),
                                 ),
                                 group_name_list: [
@@ -322,7 +324,7 @@ Resolved {
                                 pattern_string: "*",
                                 regexp: Ok(
                                     Regex(
-                                        "(?u)^(.*)$",
+                                        "^(.*)$",
                                     ),
                                 ),
                                 group_name_list: [
@@ -343,7 +345,7 @@ Resolved {
                                 pattern_string: "*",
                                 regexp: Ok(
                                     Regex(
-                                        "(?u)^(.*)$",
+                                        "^(.*)$",
                                     ),
                                 ),
                                 group_name_list: [
@@ -382,6 +384,7 @@ Resolved {
                             ),
                         ],
                         is_recursive: false,
+                        has_metachars: false,
                     },
                 ],
                 webviews: [],
@@ -397,7 +400,7 @@ Resolved {
                 Map(
                     {
                         "path": String(
-                            "$APP",
+                            "$APPDATA",
                         ),
                     },
                 ),

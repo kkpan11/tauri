@@ -3,6 +3,7 @@ source: crates/tests/acl/src/lib.rs
 expression: resolved
 ---
 Resolved {
+    has_app_acl: false,
     allowed_commands: {
         "plugin:fs|read_dir": [
             ResolvedCommand {
@@ -25,6 +26,7 @@ Resolved {
                             ),
                         ],
                         is_recursive: false,
+                        has_metachars: false,
                     },
                 ],
                 webviews: [],
@@ -52,6 +54,7 @@ Resolved {
                             ),
                         ],
                         is_recursive: false,
+                        has_metachars: false,
                     },
                 ],
                 webviews: [],
@@ -67,7 +70,7 @@ Resolved {
                 Map(
                     {
                         "path": String(
-                            "$APP",
+                            "$APPDATA",
                         ),
                     },
                 ),

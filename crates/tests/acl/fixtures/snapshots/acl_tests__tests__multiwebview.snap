@@ -3,6 +3,7 @@ source: crates/tests/acl/src/lib.rs
 expression: resolved
 ---
 Resolved {
+    has_app_acl: false,
     allowed_commands: {
         "plugin:ping|ping": [
             ResolvedCommand {
@@ -25,6 +26,7 @@ Resolved {
                             ),
                         ],
                         is_recursive: false,
+                        has_metachars: false,
                     },
                 ],
                 webviews: [
@@ -51,6 +53,7 @@ Resolved {
                             ),
                         ],
                         is_recursive: false,
+                        has_metachars: false,
                     },
                     Pattern {
                         original: "child2",
@@ -75,6 +78,7 @@ Resolved {
                             ),
                         ],
                         is_recursive: false,
+                        has_metachars: false,
                     },
                 ],
                 scope_id: None,

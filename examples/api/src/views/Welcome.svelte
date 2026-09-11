@@ -1,12 +1,19 @@
-<script>
+<script lang="ts">
   import { invoke } from '@tauri-apps/api/core'
-  import { getName, getVersion, getTauriVersion } from '@tauri-apps/api/app'
+  import {
+    getName,
+    getVersion,
+    getTauriVersion,
+    getBundleType
+  } from '@tauri-apps/api/app'
+  import type { ViewProps } from '../App.svelte'
 
-  let { onMessage } = $props()
+  let { onMessage }: ViewProps = $props()
 
   let version = $state('1.0.0')
   let tauriVersion = $state('1.0.0')
   let appName = $state('Unknown')
+  let bundleType = $state('Unknown')
 
   getName().then((n) => {
     appName = n
@@ -16,6 +23,11 @@
   })
   getTauriVersion().then((v) => {
     tauriVersion = v
+  })
+  getBundleType().then((b) => {
+    if (b) {
+      bundleType = b
+    }
   })
 
   function contextMenu() {
@@ -34,7 +46,9 @@
   <pre>
     App name: <code>{appName}</code>
     App version: <code>{version}</code>
-    Tauri version: <code>{tauriVersion}</code></pre>
+    Tauri version: <code>{tauriVersion}</code>
+    Bundle type: <code>{bundleType}</code>
+  </pre>
 
   <button class="btn" onclick={contextMenu}>Context menu</button>
 </div>
